@@ -1,12 +1,48 @@
-import { Elysia } from "elysia";
-import { cors } from "@elysiajs/cors";
-import { authRoutes } from "./routes/auth.route";
+import { Elysia } from 'elysia'
+import { cors } from '@elysiajs/cors'
+import { swagger } from '@elysiajs/swagger'
+import { routes } from '@/routes'
+import { SWAGGER_TAG_DEFINITIONS } from '@/constants/swagger'
 
 const app = new Elysia()
   .use(cors())
-  .get("/health", () => ({ status: "ok", timestamp: new Date().toISOString() }))
-  .use(authRoutes);
+  .use(
+    swagger({
+      documentation: {
+        info: {
+          title: 'Toan Ho Portfolio API',
+          version: '1.0.0',
+          description: 'API for portfolio back office management',
+        },
+        tags: SWAGGER_TAG_DEFINITIONS,
+      },
+    })
+  )
+  .onError(({ code, error, set }) => {
+    if (code === 'VALIDATION') {
+      set.status = 422
+      return {
+        message: 'Validation failed',
+        errors: error.all.map((e: { path: string; message: string }) => ({
+          field: e.path.replace('/', '') || 'body',
+          message: e.message,
+        })),
+      }
+    }
 
-app.listen(process.env.PORT ?? 3001);
+    if (code === 'NOT_FOUND') {
+      set.status = 404
+      return { message: 'Route not found' }
+    }
 
-console.log(`API running at http://localhost:${app.server?.port}`);
+    console.error(`[ERROR] ${code}:`, error)
+    set.status = 500
+    return { message: 'Internal server error' }
+  })
+  .get('/health', () => ({ status: 'ok', timestamp: new Date().toISOString() }))
+  .use(routes)
+
+app.listen(process.env.PORT ?? 3001)
+
+console.log(`API running at http://localhost:${app.server?.port}`)
+console.log(`Swagger UI at http://localhost:${app.server?.port}/swagger`)

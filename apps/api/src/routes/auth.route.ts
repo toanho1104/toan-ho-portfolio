@@ -1,39 +1,40 @@
-import { Elysia } from "elysia";
-import { jwt } from "@elysiajs/jwt";
-import { loginBodyValidator } from "@/validators/auth.validator";
-import { authService } from "@/services/auth.service";
+import { Elysia } from 'elysia'
+import { jwt } from '@elysiajs/jwt'
+import { loginBodyValidator } from '@/validators/auth.validator'
+import { authService } from '@/services/auth.service'
+import { SWAGGER_TAGS } from '@/constants/swagger'
 
-export const authRoutes = new Elysia({ prefix: "/auth" })
+export const authRoutes = new Elysia({ prefix: '/auth' })
   .use(
     jwt({
-      name: "jwt",
+      name: 'jwt',
       secret: process.env.JWT_SECRET!,
-      exp: "7d",
-    }),
+      exp: '7d',
+    })
   )
   .post(
-    "/login",
+    '/login',
     async ({ jwt, body, set }) => {
-      const user = await authService.findUserByEmail(body.email);
+      const user = await authService.findUserByEmail(body.email)
 
       if (!user) {
-        set.status = 401;
-        return { message: "Invalid credentials" };
+        set.status = 401
+        return { message: 'Invalid credentials' }
       }
 
-      const isValid = await authService.verifyPassword(
-        body.password,
-        user.passwordHash,
-      );
+      const isValid = await authService.verifyPassword(body.password, user.passwordHash)
 
       if (!isValid) {
-        set.status = 401;
-        return { message: "Invalid credentials" };
+        set.status = 401
+        return { message: 'Invalid credentials' }
       }
 
-      const token = await jwt.sign({ userId: user.id, email: user.email });
+      const token = await jwt.sign({ userId: user.id, email: user.email })
 
-      return { token };
+      return { token }
     },
-    { body: loginBodyValidator },
-  );
+    {
+      body: loginBodyValidator,
+      detail: { tags: [SWAGGER_TAGS.AUTH], summary: 'Login and get JWT token' },
+    }
+  )
