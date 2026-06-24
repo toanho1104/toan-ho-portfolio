@@ -3,19 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 3002",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "start": "next start --port 3002",
+    "lint": "eslint --max-warnings 0",
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@repo/ui": "workspace:*",
+    "daisyui": "^5.5.23",
     "next": "16.2.9",
-    "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   },
   "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
