@@ -1,7 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { useAuthStore } from '@/lib/stores/auth.store'
+import { authApi } from '@/lib/api/auth'
 
 const NAV_ITEMS = [
   { href: '/', label: 'Dashboard', icon: '▦' },
@@ -13,6 +15,14 @@ const NAV_ITEMS = [
 
 export function Sidebar() {
   const pathname = usePathname()
+  const router = useRouter()
+  const clearTokens = useAuthStore((state) => state.clearTokens)
+
+  const handleLogout = async () => {
+    await authApi.logout()   // revoke refresh token ở BE
+    clearTokens()            // clear localStorage + cookie
+    router.push('/login')
+  }
 
   return (
     <aside className="w-60 bg-base-100 border-r border-base-300 flex flex-col">
@@ -36,7 +46,10 @@ export function Sidebar() {
         </ul>
       </nav>
       <div className="p-3 border-t border-base-300">
-        <button className="btn btn-ghost btn-sm w-full justify-start gap-2 text-error">
+        <button
+          onClick={handleLogout}
+          className="btn btn-ghost btn-sm w-full justify-start gap-2 text-error"
+        >
           <span>⎋</span> Sign out
         </button>
       </div>
