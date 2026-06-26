@@ -11,10 +11,13 @@
   },
   "dependencies": {
     "@repo/ui": "workspace:*",
+    "@tanstack/react-query": "^5.101.1",
     "daisyui": "^5.5.23",
     "next": "16.2.9",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "react-hook-form": "^7.80.0",
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
