@@ -11,6 +11,7 @@ export const users = pgTable("users", {
     .$defaultFn(() => crypto.randomUUID()),
   email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
+  refreshToken: text("refresh_token"),  // null = logged out
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
