@@ -1,0 +1,48 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: portfolio-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-portfolio_db}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - portfolio
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: portfolio-api
+    restart: unless-stopped
+    env_file: .env.production
+    depends_on:
+      - db
+    ports:
+      - '3001:3001'
+    networks:
+      - portfolio
+
+  bo:
+    build:
+      context: .
+      dockerfile: apps/bo/Dockerfile
+    container_name: portfolio-bo
+    restart: unless-stopped
+    env_file: .env.production
+    depends_on:
+      - api
+    ports:
+      - '3002:3002'
+    networks:
+      - portfolio
+
+volumes:
+  postgres_data:
+
+networks:
+  portfolio:
+    driver: bridge
