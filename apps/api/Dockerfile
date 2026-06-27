@@ -1,7 +1,8 @@
 FROM oven/bun:1.2-alpine AS base
 WORKDIR /app
 
-COPY apps/api/package.json ./
+COPY apps/api/package.json ./package.json
+RUN bun -e "const pkg = await Bun.file('package.json').json(); delete pkg.devDependencies; await Bun.write('package.json', JSON.stringify(pkg, null, 2));"
 RUN bun install --production
 
 COPY apps/api/ ./
