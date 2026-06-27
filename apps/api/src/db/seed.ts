@@ -4,8 +4,14 @@ import { hash } from 'bcryptjs'
 import { eq } from 'drizzle-orm'
 
 // ─── User ────────────────────────────────────────────────────────────────────
-const email = 'admin@toanho.dev'
-const password = 'Test@123'
+const email = process.env.SEED_ADMIN_EMAIL ?? 'admin@toanho.dev'
+const password = process.env.SEED_ADMIN_PASSWORD
+
+if (!password) {
+  console.error('Missing SEED_ADMIN_PASSWORD. Set it in .env (local) or .env.production (server) before running seed.')
+  process.exit(1)
+}
+
 const passwordHash = await hash(password, 12)
 
 const [user] = await db
