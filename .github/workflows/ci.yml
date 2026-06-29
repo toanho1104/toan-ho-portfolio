@@ -54,20 +54,20 @@ jobs:
         env:
           EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
         run: |
-          install -m 700 -d ~/.ssh
-          printf '%s\n' "$EC2_SSH_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          if ssh-keygen -y -f ~/.ssh/deploy_key > /dev/null 2>&1; then
+          install -m 700 -d /home/runner/.ssh
+          printf '%s\n' "$EC2_SSH_KEY" > /home/runner/.ssh/deploy_key
+          chmod 600 /home/runner/.ssh/deploy_key
+          if ssh-keygen -y -f /home/runner/.ssh/deploy_key > /dev/null 2>&1; then
             echo "SSH key OK (raw private key)"
             exit 0
           fi
-          echo "$EC2_SSH_KEY" | tr -d ' \n\r\t' | base64 -d > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          if ssh-keygen -y -f ~/.ssh/deploy_key > /dev/null 2>&1; then
+          echo "$EC2_SSH_KEY" | tr -d ' \n\r\t' | base64 -d > /home/runner/.ssh/deploy_key
+          chmod 600 /home/runner/.ssh/deploy_key
+          if ssh-keygen -y -f /home/runner/.ssh/deploy_key > /dev/null 2>&1; then
             echo "SSH key OK (base64)"
             exit 0
           fi
-          echo "::error::EC2_SSH_KEY invalid. Paste full private key (BEGIN...END) or base64. See docs/CICD.md"
+          echo "::error::EC2_SSH_KEY invalid. Paste full private key (BEGIN...END) or base64."
           exit 1
 
       - name: Deploy to EC2
@@ -75,7 +75,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
-          key_path: ~/.ssh/deploy_key
+          key_path: /home/runner/.ssh/deploy_key
           script: |
             cd /opt/portfolio
             git pull origin dev
