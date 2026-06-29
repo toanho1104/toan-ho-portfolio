@@ -55,14 +55,26 @@ services:
       - '443:443'
     volumes:
       - ./infra/nginx/conf.d:/etc/nginx/conf.d:ro
+      - certbot-webroot:/var/www/certbot:ro
+      - certbot-certs:/etc/letsencrypt:ro
     depends_on:
       - api
       - bo
     networks:
       - portfolio
 
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - certbot-webroot:/var/www/certbot
+      - certbot-certs:/etc/letsencrypt
+    profiles:
+      - certbot
+
 volumes:
   postgres_data:
+  certbot-webroot:
+  certbot-certs:
 
 networks:
   portfolio:
