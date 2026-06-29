@@ -14,6 +14,9 @@ COPY apps/bo/ apps/bo/
 COPY packages/ui/ packages/ui/
 COPY packages/typescript-config/ packages/typescript-config/
 
+ARG NEXT_PUBLIC_API_URL=http://api.toanhodev.com
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
 RUN pnpm turbo build --filter=bo
 
 FROM node:22-alpine AS runner

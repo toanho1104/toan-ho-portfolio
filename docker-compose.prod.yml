@@ -23,8 +23,8 @@ services:
       PORT: 3001
     depends_on:
       - db
-    ports:
-      - '3001:3001'
+    expose:
+      - '3001'
     networks:
       - portfolio
 
@@ -32,6 +32,8 @@ services:
     build:
       context: .
       dockerfile: apps/bo/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     container_name: portfolio-bo
     restart: unless-stopped
     env_file: .env.production
@@ -39,8 +41,23 @@ services:
       PORT: 3002
     depends_on:
       - api
+    expose:
+      - '3002'
+    networks:
+      - portfolio
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: portfolio-nginx
+    restart: unless-stopped
     ports:
-      - '3002:3002'
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./infra/nginx/conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      - api
+      - bo
     networks:
       - portfolio
 
