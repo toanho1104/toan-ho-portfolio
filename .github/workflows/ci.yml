@@ -55,9 +55,20 @@ jobs:
           EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
         run: |
           install -m 700 -d ~/.ssh
-          echo "$EC2_SSH_KEY" | base64 -d > ~/.ssh/deploy_key
+          printf '%s\n' "$EC2_SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keygen -y -f ~/.ssh/deploy_key > /dev/null
+          if ssh-keygen -y -f ~/.ssh/deploy_key > /dev/null 2>&1; then
+            echo "SSH key OK (raw private key)"
+            exit 0
+          fi
+          echo "$EC2_SSH_KEY" | tr -d ' \n\r\t' | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          if ssh-keygen -y -f ~/.ssh/deploy_key > /dev/null 2>&1; then
+            echo "SSH key OK (base64)"
+            exit 0
+          fi
+          echo "::error::EC2_SSH_KEY invalid. Paste full private key (BEGIN...END) or base64. See docs/CICD.md"
+          exit 1
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.2.2
