@@ -7,6 +7,9 @@ RUN bun install --production
 
 COPY apps/api/ ./
 
+ARG DEPLOY_SHA=unknown
+ENV DEPLOY_SHA=$DEPLOY_SHA
+
 RUN bun run build
 
 RUN apk add --no-cache wget

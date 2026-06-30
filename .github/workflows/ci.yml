@@ -77,11 +77,17 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key_path: /home/runner/.ssh/deploy_key
           script: |
+            set -euo pipefail
             cd /opt/portfolio
-            git pull origin dev
+            git fetch origin dev
+            git checkout dev
+            git reset --hard origin/dev
+            export DEPLOY_SHA="$(git rev-parse --short HEAD)"
+            echo "Deploying commit ${DEPLOY_SHA}"
             COMPOSE="docker compose --env-file .env.production -f docker-compose.prod.yml"
-            $COMPOSE up -d --build --wait || {
-              $COMPOSE up -d --build
+            $COMPOSE build bo web api
+            $COMPOSE up -d --force-recreate --remove-orphans --wait || {
+              $COMPOSE up -d --force-recreate --remove-orphans
               echo "Waiting for services to become healthy..."
               for i in $(seq 1 90); do
                 $COMPOSE ps api | grep -q "(healthy)" || { sleep 2; continue; }

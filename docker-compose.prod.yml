@@ -26,6 +26,8 @@ services:
     build:
       context: .
       dockerfile: apps/api/Dockerfile
+      args:
+        DEPLOY_SHA: ${DEPLOY_SHA:-unknown}
     container_name: portfolio-api
     restart: unless-stopped
     env_file: .env.production
@@ -51,6 +53,7 @@ services:
       dockerfile: apps/bo/Dockerfile
       args:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        DEPLOY_SHA: ${DEPLOY_SHA:-unknown}
     container_name: portfolio-bo
     restart: unless-stopped
     env_file: .env.production
@@ -76,6 +79,7 @@ services:
       dockerfile: apps/web/Dockerfile
       args:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        DEPLOY_SHA: ${DEPLOY_SHA:-unknown}
     container_name: portfolio-web
     restart: unless-stopped
     environment:
