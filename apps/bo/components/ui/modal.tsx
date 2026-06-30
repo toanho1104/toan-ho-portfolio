@@ -57,12 +57,12 @@ export function Modal({
   if (!mounted || !open) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
       {/* Backdrop — separate layer, always behind panel */}
       <button
         type="button"
         aria-label="Close dialog"
-        className="absolute inset-0 bg-black/60 backdrop-blur-[1px]"
+        className="absolute inset-0 z-0 bg-black/60 backdrop-blur-[1px]"
         onClick={onClose}
       />
 
@@ -71,7 +71,8 @@ export function Modal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="bo-modal-title"
-        className={`bo-modal-panel relative z-100 flex w-full flex-col ${sizeClass[size]} max-h-[min(90vh,900px)] overflow-hidden rounded-2xl border border-base-300 shadow-2xl`}
+        className={`bo-modal-panel relative z-10 flex w-full flex-col ${sizeClass[size]} max-h-[min(90vh,900px)] overflow-hidden rounded-2xl border border-base-300 shadow-2xl`}
+        onMouseDown={(event) => event.stopPropagation()}
       >
         <div className="bo-modal-panel flex shrink-0 items-center justify-between border-b border-base-300 px-6 py-4">
           <h3 id="bo-modal-title" className="text-lg font-bold">
