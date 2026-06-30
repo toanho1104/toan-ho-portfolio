@@ -9,6 +9,8 @@ COPY apps/api/ ./
 
 RUN bun run build
 
+RUN apk add --no-cache wget
+
 ENV NODE_ENV=production
 EXPOSE 3001
 

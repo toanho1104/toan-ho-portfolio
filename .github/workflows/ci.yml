@@ -80,3 +80,14 @@ jobs:
             cd /opt/portfolio
             git pull origin dev
             docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
+            echo "=== Container status ==="
+            docker compose --env-file .env.production -f docker-compose.prod.yml ps
+            echo "=== Smoke test ==="
+            curl -sf https://api.toanhodev.com/health || {
+              echo "=== API logs ==="
+              docker compose --env-file .env.production -f docker-compose.prod.yml logs api --tail 80
+              echo "=== Nginx logs ==="
+              docker compose --env-file .env.production -f docker-compose.prod.yml logs nginx --tail 30
+              exit 1
+            }
+            echo "Deploy OK"
