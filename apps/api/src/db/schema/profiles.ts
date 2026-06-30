@@ -16,6 +16,8 @@ export const profiles = pgTable('profiles', {
   linkedinUrl: text('linkedin_url'),
   websiteUrl: text('website_url'),
   resumeUrl: text('resume_url'),
+  resumeS3Key: text('resume_s3_key'),
+  resumeFileName: text('resume_file_name'),
   isAvailable: boolean('is_available').notNull().default(true),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),

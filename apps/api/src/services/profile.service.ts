@@ -4,9 +4,34 @@ import { profiles } from "@/db/schema";
 
 type UpdateProfileInput = Partial<typeof profiles.$inferInsert>;
 
+type PublicProfile = Omit<
+  typeof profiles.$inferSelect,
+  'resumeS3Key' | 'resumeFileName'
+> & {
+  resume: {
+    available: boolean
+    fileName: string | null
+    downloadPath: string
+  } | null
+}
+
 export const profileService = {
-  async getPublic() {
-    return db.query.profiles.findFirst();
+  async getPublic(): Promise<PublicProfile | undefined> {
+    const profile = await db.query.profiles.findFirst()
+    if (!profile) return undefined
+
+    const { resumeS3Key, resumeFileName, ...rest } = profile
+
+    return {
+      ...rest,
+      resume: resumeS3Key
+        ? {
+            available: true,
+            fileName: resumeFileName,
+            downloadPath: '/resume/download',
+          }
+        : null,
+    }
   },
 
   async getByUserId(userId: string) {

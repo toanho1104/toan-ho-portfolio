@@ -12,4 +12,6 @@ RUN bun run build
 ENV NODE_ENV=production
 EXPOSE 3001
 
-CMD ["bun", "run", "start"]
+RUN chmod +x docker-entrypoint.sh
+
+ENTRYPOINT ["./docker-entrypoint.sh"]
