@@ -10,7 +10,6 @@ import {
 type CreateProjectInput = typeof projects.$inferInsert;
 type UpdateProjectInput = Partial<CreateProjectInput>;
 
-// HTTP body dùng string cho dates, service lo việc convert
 type ProjectBody = Omit<UpdateProjectInput, "startDate" | "endDate"> & {
   startDate?: string | null;
   endDate?: string | null;
@@ -57,25 +56,33 @@ export const projectService = {
   },
 
   async create(userId: string, data: Omit<ProjectBody, "userId">) {
+    const { startDate, endDate, ...rest } = data;
+
     const [created] = await db
       .insert(projects)
       .values({
         userId,
-        ...data,
-        startDate: data.startDate ? new Date(data.startDate) : null,
-        endDate: data.endDate ? new Date(data.endDate) : null,
+        ...rest,
+        startDate: startDate ? new Date(startDate) : null,
+        endDate: endDate ? new Date(endDate) : null,
       })
       .returning();
     return created;
   },
 
   async update(id: string, data: ProjectBody) {
+    const { startDate, endDate, ...rest } = data;
+
     const [updated] = await db
       .update(projects)
       .set({
-        ...data,
-        startDate: data.startDate ? new Date(data.startDate) : null,
-        endDate: data.endDate ? new Date(data.endDate) : null,
+        ...rest,
+        ...(startDate !== undefined && {
+          startDate: startDate ? new Date(startDate) : null,
+        }),
+        ...(endDate !== undefined && {
+          endDate: endDate ? new Date(endDate) : null,
+        }),
         updatedAt: new Date(),
       })
       .where(eq(projects.id, id))
@@ -85,5 +92,6 @@ export const projectService = {
 
   async delete(id: string) {
     await db.delete(projects).where(eq(projects.id, id));
+    return { message: "Project deleted successfully" };
   },
 };

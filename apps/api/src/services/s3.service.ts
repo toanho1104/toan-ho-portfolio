@@ -71,4 +71,21 @@ export const s3Service = {
 
     return getSignedUrl(client, command, { expiresIn: expiresInSeconds })
   },
+
+  async getPresignedObjectUrl(
+    key: string,
+    contentType: string,
+    expiresInSeconds = 3600,
+  ) {
+    const { bucket } = getAwsConfig()
+    const client = getS3Client()
+
+    const command = new GetObjectCommand({
+      Bucket: bucket,
+      Key: key,
+      ResponseContentType: contentType,
+    })
+
+    return getSignedUrl(client, command, { expiresIn: expiresInSeconds })
+  },
 }

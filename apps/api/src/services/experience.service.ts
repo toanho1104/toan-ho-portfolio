@@ -27,22 +27,26 @@ export const experienceService = {
   },
 
   async create(userId: string, data: ExperienceBody) {
+    const { startDate, endDate, ...rest } = data
+
     const [created] = await db.insert(experiences).values({
       userId,
-      company: data.company ?? '',
-      position: data.position ?? {},
-      startDate: new Date(data.startDate!),
-      ...data,
-      endDate: data.endDate ? new Date(data.endDate) : null,
+      ...rest,
+      company: rest.company ?? '',
+      position: rest.position ?? {},
+      startDate: new Date(startDate!),
+      endDate: endDate ? new Date(endDate) : null,
     }).returning()
     return created
   },
 
   async update(id: string, data: ExperienceBody) {
+    const { startDate, endDate, ...rest } = data
+
     const [updated] = await db.update(experiences).set({
-      ...data,
-      startDate: data.startDate ? new Date(data.startDate) : undefined,
-      endDate: data.endDate ? new Date(data.endDate) : null,
+      ...rest,
+      ...(startDate !== undefined && { startDate: new Date(startDate) }),
+      ...(endDate !== undefined && { endDate: endDate ? new Date(endDate) : null }),
       updatedAt: new Date(),
     }).where(eq(experiences.id, id)).returning()
     return updated

@@ -27,45 +27,27 @@ async function refreshAccessToken(): Promise<string | null> {
   }
 }
 
-export async function apiFetch<T>(
+async function request<T>(
   path: string,
-  options?: RequestInit,
+  options: RequestInit = {},
+  accessToken?: string | null,
 ): Promise<T> {
-  const accessToken = useAuthStore.getState().accessToken
+  const token = accessToken ?? useAuthStore.getState().accessToken
+  const isFormData = options.body instanceof FormData
 
   const res = await fetch(`${API_URL}${path}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
-      ...options?.headers,
-    },
     ...options,
+    headers: {
+      ...(!isFormData && { 'Content-Type': 'application/json' }),
+      ...(token && { Authorization: `Bearer ${token}` }),
+      ...options.headers,
+    },
   })
 
-  // Access token hết hạn → thử refresh
-  if (res.status === 401) {
+  if (res.status === 401 && accessToken === undefined) {
     const newToken = await refreshAccessToken()
-
-    if (!newToken) {
-      throw new Error('Session expired. Please login again.')
-    }
-
-    // Retry request với token mới
-    const retryRes = await fetch(`${API_URL}${path}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${newToken}`,
-        ...options?.headers,
-      },
-      ...options,
-    })
-
-    if (!retryRes.ok) {
-      const error = await retryRes.json().catch(() => ({ message: 'Unknown error' }))
-      throw new Error(error.message ?? `HTTP ${retryRes.status}`)
-    }
-
-    return retryRes.json() as Promise<T>
+    if (!newToken) throw new Error('Session expired. Please login again.')
+    return request<T>(path, options, newToken)
   }
 
   if (!res.ok) {
@@ -73,5 +55,18 @@ export async function apiFetch<T>(
     throw new Error(error.message ?? `HTTP ${res.status}`)
   }
 
+  if (res.status === 204) return undefined as T
   return res.json() as Promise<T>
+}
+
+export async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
+  return request<T>(path, options)
+}
+
+export async function apiUpload<T>(path: string, formData: FormData): Promise<T> {
+  return request<T>(path, { method: 'POST', body: formData })
+}
+
+export function getApiUrl(path: string) {
+  return `${API_URL}${path}`
 }
