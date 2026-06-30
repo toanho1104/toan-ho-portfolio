@@ -15,7 +15,7 @@ const publicSkillRoutes = new Elysia({ prefix: '/skills' })
     query: skillQueryValidator,
     detail: { tags: [SWAGGER_TAGS.SKILLS], summary: 'Get all skills (public)' },
   })
-  .get('/categories', () => skillService.getAllCategories(''), {
+  .get('/categories', () => skillService.getAllCategories(), {
     detail: { tags: [SWAGGER_TAGS.SKILLS], summary: 'Get skill categories with skills (public)' },
   })
 

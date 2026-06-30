@@ -9,6 +9,7 @@ export const profiles = pgTable('profiles', {
   title: jsonb('title').notNull().default({ vi: '', en: '' }),
   bio: jsonb('bio').notNull().default({ vi: '', en: '' }),
   avatarUrl: text('avatar_url'),
+  avatarS3Key: text('avatar_s3_key'),
   location: text('location'),
   email: text('email'),
   phone: text('phone'),

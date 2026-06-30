@@ -1,9 +1,9 @@
 import { t, type Static } from 'elysia'
 import { skillLevelEnum } from '@/db/schema'
 import { paginationValidator } from '@/validators/common.validator'
+import { drizzleEnumField } from '@/validators/enum.validator'
 
-const [first, second, ...rest] = skillLevelEnum.enumValues.map(v => t.Literal(v))
-const skillLevelField = t.Union([first!, second!, ...rest])
+const skillLevelField = drizzleEnumField(skillLevelEnum.enumValues)
 
 export const createSkillCategoryBodyValidator = t.Object({
   name: t.Object({ vi: t.Optional(t.String()), en: t.Optional(t.String()) }),

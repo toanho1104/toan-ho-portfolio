@@ -1,13 +1,33 @@
-import { eq } from "drizzle-orm";
-import { db } from "@/db";
-import { profiles } from "@/db/schema";
+import { eq } from 'drizzle-orm'
+import { db } from '@/db'
+import { profiles } from '@/db/schema'
 
-type UpdateProfileInput = Partial<typeof profiles.$inferInsert>;
+type ProfileRow = typeof profiles.$inferSelect
+type UpdateProfileInput = Partial<typeof profiles.$inferInsert>
 
-type PublicProfile = Omit<
-  typeof profiles.$inferSelect,
-  'resumeS3Key' | 'resumeFileName'
+const UPDATABLE_FIELDS = [
+  'name',
+  'title',
+  'bio',
+  'avatarUrl',
+  'location',
+  'email',
+  'phone',
+  'githubUrl',
+  'linkedinUrl',
+  'websiteUrl',
+  'resumeUrl',
+  'isAvailable',
+] as const satisfies ReadonlyArray<keyof UpdateProfileInput>
+
+export type PublicProfile = Omit<
+  ProfileRow,
+  'resumeS3Key' | 'resumeFileName' | 'avatarS3Key'
 > & {
+  avatar: {
+    available: boolean
+    urlPath: string
+  } | null
   resume: {
     available: boolean
     fileName: string | null
@@ -15,47 +35,88 @@ type PublicProfile = Omit<
   } | null
 }
 
+function pickUpdatableFields(data: UpdateProfileInput): UpdateProfileInput {
+  const result: UpdateProfileInput = {}
+
+  for (const key of UPDATABLE_FIELDS) {
+    if (data[key] !== undefined) {
+      ;(result as Record<string, unknown>)[key] = data[key]
+    }
+  }
+
+  return result
+}
+
+function toPublicProfile(profile: ProfileRow): PublicProfile {
+  const { resumeS3Key, resumeFileName, avatarS3Key, ...rest } = profile
+
+  return {
+    ...rest,
+    avatar: avatarS3Key
+      ? { available: true, urlPath: '/profile/avatar' }
+      : rest.avatarUrl
+        ? { available: true, urlPath: rest.avatarUrl }
+        : null,
+    resume: resumeS3Key
+      ? {
+          available: true,
+          fileName: resumeFileName,
+          downloadPath: '/resume/download',
+        }
+      : null,
+  }
+}
+
 export const profileService = {
+  toPublicProfile,
+
   async getPublic(): Promise<PublicProfile | undefined> {
     const profile = await db.query.profiles.findFirst()
     if (!profile) return undefined
-
-    const { resumeS3Key, resumeFileName, ...rest } = profile
-
-    return {
-      ...rest,
-      resume: resumeS3Key
-        ? {
-            available: true,
-            fileName: resumeFileName,
-            downloadPath: '/resume/download',
-          }
-        : null,
-    }
+    return toPublicProfile(profile)
   },
 
   async getByUserId(userId: string) {
     return db.query.profiles.findFirst({
       where: eq(profiles.userId, userId),
-    });
+    })
   },
 
-  async upsert(userId: string, data: UpdateProfileInput) {
-    const existing = await profileService.getByUserId(userId);
+  async ensureProfile(userId: string) {
+    const existing = await profileService.getByUserId(userId)
+    if (existing) return existing
+
+    const [created] = await db
+      .insert(profiles)
+      .values({ userId, name: '' })
+      .returning()
+
+    return created
+  },
+
+  async upsert(userId: string, data: UpdateProfileInput): Promise<PublicProfile> {
+    const payload = pickUpdatableFields(data)
+    const existing = await profileService.getByUserId(userId)
 
     if (existing) {
       const [updated] = await db
         .update(profiles)
-        .set({ ...data, updatedAt: new Date() })
+        .set({ ...payload, updatedAt: new Date() })
         .where(eq(profiles.userId, userId))
-        .returning();
-      return updated;
+        .returning()
+
+      return toPublicProfile(updated!)
     }
 
     const [created] = await db
       .insert(profiles)
-      .values({ userId, name: "", ...data })
-      .returning();
-    return created;
+      .values({
+        userId,
+        name: payload.name ?? '',
+        ...payload,
+      })
+      .returning()
+
+    return toPublicProfile(created!)
   },
-};
+}
