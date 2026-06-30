@@ -17,7 +17,10 @@ COPY packages/typescript-config/ packages/typescript-config/
 ARG NEXT_PUBLIC_API_URL=https://api.toanhodev.com
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
-RUN pnpm turbo build --filter=web
+ARG DEPLOY_SHA=unknown
+ENV DEPLOY_SHA=$DEPLOY_SHA
+
+RUN TURBO_FORCE=true pnpm turbo build --filter=web
 
 FROM node:22-alpine AS runner
 WORKDIR /app
