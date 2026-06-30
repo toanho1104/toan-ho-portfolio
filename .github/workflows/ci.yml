@@ -79,15 +79,30 @@ jobs:
           script: |
             cd /opt/portfolio
             git pull origin dev
-            docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
+            COMPOSE="docker compose --env-file .env.production -f docker-compose.prod.yml"
+            $COMPOSE up -d --build --wait || {
+              $COMPOSE up -d --build
+              echo "Waiting for services to become healthy..."
+              for i in $(seq 1 90); do
+                $COMPOSE ps api | grep -q "(healthy)" || { sleep 2; continue; }
+                $COMPOSE ps bo | grep -q "(healthy)" || { sleep 2; continue; }
+                $COMPOSE ps web | grep -q "(healthy)" || { sleep 2; continue; }
+                break
+              done
+            }
+            $COMPOSE restart nginx
             echo "=== Container status ==="
-            docker compose --env-file .env.production -f docker-compose.prod.yml ps
+            $COMPOSE ps
             echo "=== Smoke test ==="
             curl -sf https://api.toanhodev.com/health || {
               echo "=== API logs ==="
-              docker compose --env-file .env.production -f docker-compose.prod.yml logs api --tail 80
+              $COMPOSE logs api --tail 80
+              echo "=== BO logs ==="
+              $COMPOSE logs bo --tail 40
+              echo "=== Web logs ==="
+              $COMPOSE logs web --tail 40
               echo "=== Nginx logs ==="
-              docker compose --env-file .env.production -f docker-compose.prod.yml logs nginx --tail 30
+              $COMPOSE logs nginx --tail 30
               exit 1
             }
             echo "Deploy OK"
