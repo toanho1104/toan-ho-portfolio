@@ -3,6 +3,7 @@ import type { I18nField, PaginatedResponse, ProjectStatus, ProjectType } from '.
 export type Project = {
   id: string
   userId: string
+  experienceId: string | null
   title: I18nField
   summary: I18nField
   description: I18nField
@@ -24,6 +25,7 @@ export type Project = {
 }
 
 export type ProjectInput = {
+  experienceId?: string
   title: I18nField
   summary?: I18nField
   description?: I18nField

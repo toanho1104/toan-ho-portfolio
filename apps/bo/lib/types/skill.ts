@@ -1,9 +1,10 @@
-import type { I18nField, SkillLevel } from './common'
+import type { I18nField, SkillLevel, SkillType } from './common'
 
 export type Skill = {
   id: string
   categoryId: string
   name: string
+  type: SkillType
   level: SkillLevel
   iconUrl: string | null
   yearsOfExperience: number | null
@@ -28,6 +29,7 @@ export type SkillCategoryInput = {
 export type SkillInput = {
   categoryId: string
   name: string
+  type?: SkillType
   level?: SkillLevel
   iconUrl?: string
   yearsOfExperience?: number

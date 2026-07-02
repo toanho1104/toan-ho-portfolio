@@ -3,6 +3,7 @@ import { optionalUrlSchema } from './common.schema'
 import { PROJECT_STATUSES, PROJECT_TYPES, parseTechStack, toIsoDate } from '@/lib/types/common'
 
 export const projectSchema = z.object({
+  experienceId: z.string().optional(),
   titleVi: z.string().min(1, 'Title (VI) is required'),
   titleEn: z.string().optional(),
   summaryVi: z.string().optional(),
@@ -26,6 +27,7 @@ export const projectSchema = z.object({
 export type ProjectFormValues = z.infer<typeof projectSchema>
 
 export function projectToForm(project: {
+  experienceId?: string | null
   title: { vi?: string; en?: string }
   summary: { vi?: string; en?: string }
   description: { vi?: string; en?: string }
@@ -43,6 +45,7 @@ export function projectToForm(project: {
   endDate?: string | null
 }): ProjectFormValues {
   return {
+    experienceId: project.experienceId ?? '',
     titleVi: project.title.vi ?? '',
     titleEn: project.title.en ?? '',
     summaryVi: project.summary.vi ?? '',
@@ -66,6 +69,7 @@ export function projectToForm(project: {
 
 export function formToProjectPayload(values: ProjectFormValues) {
   return {
+    experienceId: values.experienceId || undefined,
     title: { vi: values.titleVi, en: values.titleEn },
     summary: { vi: values.summaryVi, en: values.summaryEn },
     description: { vi: values.descriptionVi, en: values.descriptionEn },

@@ -6,6 +6,7 @@ import { projectTypeEnum, projectStatusEnum } from './enums'
 export const projects = pgTable('projects', {
   id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
   userId: text('user_id').notNull().references(() => users.id),
+  experienceId: text('experience_id'),
   title: jsonb('title').notNull().default({ vi: '', en: '' }),
   summary: jsonb('summary').notNull().default({ vi: '', en: '' }),
   description: jsonb('description').notNull().default({ vi: '', en: '' }),

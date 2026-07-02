@@ -12,6 +12,7 @@ const projectTypeField = drizzleEnumField(projectTypeEnum.enumValues);
 const projectStatusField = drizzleEnumField(projectStatusEnum.enumValues);
 
 export const createProjectBodyValidator = t.Object({
+  experienceId: t.Optional(t.String()),
   title: i18nField,
   summary: t.Optional(i18nField),
   description: t.Optional(i18nField),

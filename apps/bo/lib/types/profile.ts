@@ -12,7 +12,10 @@ export type Profile = {
   phone: string | null
   githubUrl: string | null
   linkedinUrl: string | null
+  youtubeUrl: string | null
   websiteUrl: string | null
+  educationSchool: I18nField
+  educationDegree: I18nField
   resumeUrl: string | null
   isAvailable: boolean
   createdAt: string
@@ -38,7 +41,10 @@ export type UpdateProfileInput = {
   phone?: string
   githubUrl?: string
   linkedinUrl?: string
+  youtubeUrl?: string
   websiteUrl?: string
+  educationSchool?: I18nField
+  educationDegree?: I18nField
   resumeUrl?: string
   isAvailable?: boolean
 }

@@ -13,7 +13,12 @@ export const profileSchema = z.object({
   phone: z.string().optional(),
   githubUrl: optionalUrlSchema,
   linkedinUrl: optionalUrlSchema,
+  youtubeUrl: optionalUrlSchema,
   websiteUrl: optionalUrlSchema,
+  educationSchoolVi: z.string().optional(),
+  educationSchoolEn: z.string().optional(),
+  educationDegreeVi: z.string().optional(),
+  educationDegreeEn: z.string().optional(),
   resumeUrl: optionalUrlSchema,
   isAvailable: z.boolean(),
 });
@@ -30,7 +35,10 @@ export function profileToForm(profile: {
   phone?: string | null;
   githubUrl?: string | null;
   linkedinUrl?: string | null;
+  youtubeUrl?: string | null;
   websiteUrl?: string | null;
+  educationSchool?: { vi?: string; en?: string };
+  educationDegree?: { vi?: string; en?: string };
   resumeUrl?: string | null;
   isAvailable: boolean;
 }): ProfileFormValues {
@@ -46,7 +54,12 @@ export function profileToForm(profile: {
     phone: profile.phone ?? "",
     githubUrl: profile.githubUrl ?? "",
     linkedinUrl: profile.linkedinUrl ?? "",
+    youtubeUrl: profile.youtubeUrl ?? "",
     websiteUrl: profile.websiteUrl ?? "",
+    educationSchoolVi: profile.educationSchool?.vi ?? "",
+    educationSchoolEn: profile.educationSchool?.en ?? "",
+    educationDegreeVi: profile.educationDegree?.vi ?? "",
+    educationDegreeEn: profile.educationDegree?.en ?? "",
     resumeUrl: profile.resumeUrl ?? "",
     isAvailable: profile.isAvailable,
   };
@@ -63,7 +76,16 @@ export function formToProfilePayload(values: ProfileFormValues) {
     phone: values.phone || undefined,
     githubUrl: values.githubUrl || undefined,
     linkedinUrl: values.linkedinUrl || undefined,
+    youtubeUrl: values.youtubeUrl || undefined,
     websiteUrl: values.websiteUrl || undefined,
+    educationSchool: {
+      vi: values.educationSchoolVi,
+      en: values.educationSchoolEn,
+    },
+    educationDegree: {
+      vi: values.educationDegreeVi,
+      en: values.educationDegreeEn,
+    },
     resumeUrl: values.resumeUrl || undefined,
     isAvailable: values.isAvailable,
   };

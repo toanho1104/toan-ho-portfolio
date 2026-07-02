@@ -15,7 +15,10 @@ export const updateProfileBodyValidator = t.Object({
   phone: t.Optional(t.String()),
   githubUrl: t.Optional(t.String({ format: 'uri' })),
   linkedinUrl: t.Optional(t.String({ format: 'uri' })),
+  youtubeUrl: t.Optional(t.String({ format: 'uri' })),
   websiteUrl: t.Optional(t.String({ format: 'uri' })),
+  educationSchool: t.Optional(i18nField),
+  educationDegree: t.Optional(i18nField),
   resumeUrl: t.Optional(t.String({ format: 'uri' })),
   isAvailable: t.Optional(t.Boolean()),
 })

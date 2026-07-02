@@ -15,7 +15,10 @@ const UPDATABLE_FIELDS = [
   'phone',
   'githubUrl',
   'linkedinUrl',
+  'youtubeUrl',
   'websiteUrl',
+  'educationSchool',
+  'educationDegree',
   'resumeUrl',
   'isAvailable',
 ] as const satisfies ReadonlyArray<keyof UpdateProfileInput>

@@ -35,6 +35,15 @@ export const SKILL_LEVELS = [
 ] as const;
 export type SkillLevel = (typeof SKILL_LEVELS)[number];
 
+export const SKILL_TYPES = [
+  "technical",
+  "soft",
+  "language",
+  "tool",
+  "ai",
+] as const;
+export type SkillType = (typeof SKILL_TYPES)[number];
+
 export function formatI18n(
   value: I18nField | null | undefined,
   locale: "vi" | "en" = "en",

@@ -8,7 +8,7 @@ import { Button, Input } from '@repo/ui'
 import { skillsApi } from '@/lib/api/skills'
 import { queryKeys } from '@/lib/query-keys'
 import type { Skill, SkillCategory } from '@/lib/types/skill'
-import { SKILL_LEVELS } from '@/lib/types/common'
+import { SKILL_LEVELS, SKILL_TYPES } from '@/lib/types/common'
 import { skillSchema, type SkillFormValues } from '@/lib/schemas/skill.schema'
 import { Modal } from '@/components/ui/modal'
 import { SelectField } from '@/components/ui/select-field'
@@ -34,7 +34,7 @@ export function SkillFormModal({
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<SkillFormValues>({
     resolver: zodResolver(skillSchema),
-    defaultValues: { level: 'intermediate', sortOrder: 0 },
+    defaultValues: { type: 'technical', level: 'intermediate', sortOrder: 0 },
   })
 
   useEffect(() => {
@@ -44,6 +44,7 @@ export function SkillFormModal({
           ? {
               categoryId: skill.categoryId,
               name: skill.name,
+              type: skill.type,
               level: skill.level,
               iconUrl: skill.iconUrl ?? '',
               yearsOfExperience: skill.yearsOfExperience ?? undefined,
@@ -52,6 +53,7 @@ export function SkillFormModal({
           : {
               categoryId: defaultCategoryId ?? categories[0]?.id ?? '',
               name: '',
+              type: 'technical',
               level: 'intermediate',
               sortOrder: 0,
               iconUrl: '',
@@ -65,6 +67,7 @@ export function SkillFormModal({
       const payload = {
         categoryId: values.categoryId,
         name: values.name,
+        type: values.type,
         level: values.level,
         iconUrl: values.iconUrl || undefined,
         yearsOfExperience: values.yearsOfExperience,
@@ -91,6 +94,12 @@ export function SkillFormModal({
           {...register('categoryId')}
         />
         <Input label="Skill name" error={errors.name?.message} {...register('name')} />
+        <SelectField
+          label="Type"
+          options={SKILL_TYPES.map((t) => ({ value: t, label: t }))}
+          error={errors.type?.message}
+          {...register('type')}
+        />
         <SelectField
           label="Level"
           options={SKILL_LEVELS.map((l) => ({ value: l, label: l }))}

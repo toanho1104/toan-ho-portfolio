@@ -1,7 +1,7 @@
 import { pgTable, text, timestamp, integer, jsonb } from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm'
 import { users } from './users'
-import { skillLevelEnum } from './enums'
+import { skillLevelEnum, skillTypeEnum } from './enums'
 
 export const skillCategories = pgTable('skill_categories', {
   id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
@@ -15,6 +15,7 @@ export const skills = pgTable('skills', {
   id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
   categoryId: text('category_id').notNull().references(() => skillCategories.id),
   name: text('name').notNull(),
+  type: skillTypeEnum('type').notNull().default('technical'),
   level: skillLevelEnum('level').notNull().default('intermediate'),
   iconUrl: text('icon_url'),
   yearsOfExperience: integer('years_of_experience'),

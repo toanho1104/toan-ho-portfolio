@@ -15,9 +15,11 @@ import { PROJECT_STATUSES, PROJECT_TYPES } from "@/lib/types/common";
 import type { Project } from "@/lib/types/project";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input } from "@repo/ui";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { experiencesApi } from "@/lib/api/experiences";
+import { queryKeys } from "@/lib/query-keys";
 
 type ProjectFormModalProps = {
   open: boolean;
@@ -32,6 +34,20 @@ export function ProjectFormModal({
 }: ProjectFormModalProps) {
   const queryClient = useQueryClient();
   const isEdit = !!project;
+
+  const { data: experiencesData } = useQuery({
+    queryKey: queryKeys.experiences({ limit: 50 }),
+    queryFn: () => experiencesApi.list({ limit: 50 }),
+    enabled: open,
+  });
+
+  const experienceOptions = [
+    { value: "", label: "— None (personal / standalone) —" },
+    ...(experiencesData?.data ?? []).map((exp) => ({
+      value: exp.id,
+      label: `${exp.company} (${exp.startDate.slice(0, 7)})`,
+    })),
+  ];
 
   const {
     register,
@@ -54,6 +70,7 @@ export function ProjectFormModal({
         project
           ? projectToForm(project)
           : {
+              experienceId: "",
               titleVi: "",
               titleEn: "",
               type: "personal",
@@ -112,6 +129,13 @@ export function ProjectFormModal({
           register={register}
           errors={errors}
           multiline
+        />
+
+        <SelectField
+          label="Linked company (optional)"
+          options={experienceOptions}
+          error={errors.experienceId?.message}
+          {...register("experienceId")}
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

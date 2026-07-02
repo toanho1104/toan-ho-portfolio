@@ -118,6 +118,11 @@ export function ProfileForm() {
               {...register("linkedinUrl")}
             />
             <Input
+              label="YouTube URL"
+              error={errors.youtubeUrl?.message}
+              {...register("youtubeUrl")}
+            />
+            <Input
               label="Website URL"
               error={errors.websiteUrl?.message}
               {...register("websiteUrl")}
@@ -128,6 +133,21 @@ export function ProfileForm() {
               {...register("resumeUrl")}
             />
           </div>
+
+          <I18nFields
+            label="Education — school"
+            viKey="educationSchoolVi"
+            enKey="educationSchoolEn"
+            register={register}
+            errors={errors}
+          />
+          <I18nFields
+            label="Education — degree"
+            viKey="educationDegreeVi"
+            enKey="educationDegreeEn"
+            register={register}
+            errors={errors}
+          />
 
           <label className="label cursor-pointer justify-start gap-3 w-fit">
             <input

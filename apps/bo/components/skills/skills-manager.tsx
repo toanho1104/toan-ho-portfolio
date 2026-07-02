@@ -110,6 +110,7 @@ export function SkillsManager() {
                       <thead>
                         <tr>
                           <th>Name</th>
+                          <th>Type</th>
                           <th>Level</th>
                           <th>Years</th>
                           <th className="text-right">Actions</th>
@@ -119,6 +120,7 @@ export function SkillsManager() {
                         {category.skills.map((skill) => (
                           <tr key={skill.id}>
                             <td>{skill.name}</td>
+                            <td><span className="badge badge-outline badge-sm">{skill.type}</span></td>
                             <td><span className="badge badge-ghost badge-sm">{skill.level}</span></td>
                             <td>{skill.yearsOfExperience ?? '—'}</td>
                             <td className="text-right">

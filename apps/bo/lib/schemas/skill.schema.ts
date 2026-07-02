@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { SKILL_LEVELS } from '@/lib/types/common'
+import { SKILL_LEVELS, SKILL_TYPES } from '@/lib/types/common'
 
 export const skillCategorySchema = z.object({
   nameVi: z.string().min(1, 'Name (VI) is required'),
@@ -12,6 +12,7 @@ export type SkillCategoryFormValues = z.infer<typeof skillCategorySchema>
 export const skillSchema = z.object({
   categoryId: z.string().min(1, 'Category is required'),
   name: z.string().min(1, 'Name is required'),
+  type: z.enum(SKILL_TYPES),
   level: z.enum(SKILL_LEVELS),
   iconUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
   yearsOfExperience: z.number().min(0).optional(),
