@@ -3,6 +3,7 @@ import { cors } from '@elysiajs/cors'
 import { swagger } from '@elysiajs/swagger'
 import { routes } from '@/routes'
 import { SWAGGER_TAG_DEFINITIONS } from '@/constants/swagger'
+import { getAwsStorageStatus, isAwsConfigured } from '@/config/aws'
 
 const app = new Elysia()
   .use(cors())
@@ -39,10 +40,18 @@ const app = new Elysia()
     set.status = 500
     return { message: 'Internal server error' }
   })
-  .get('/health', () => ({ status: 'ok', timestamp: new Date().toISOString() }))
+  .get('/health', () => ({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    storage: getAwsStorageStatus(),
+  }))
   .use(routes)
 
 app.listen(process.env.PORT ?? 3001)
+
+if (!isAwsConfigured()) {
+  console.warn('[aws] S3 uploads disabled:', getAwsStorageStatus().reason)
+}
 
 console.log(`API running at http://localhost:${app.server?.port}`)
 console.log(`Swagger UI at http://localhost:${app.server?.port}/swagger`)

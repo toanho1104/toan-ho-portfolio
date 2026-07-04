@@ -33,3 +33,37 @@ export function isAwsConfigured() {
     hasAwsCredentials()
   )
 }
+
+export function getAwsStorageStatus() {
+  const region = process.env.AWS_REGION ?? null
+  const bucket = process.env.AWS_S3_BUCKET ?? null
+  const credentials = hasAwsCredentials()
+
+  if (!region || !bucket) {
+    return {
+      ready: false,
+      reason: 'missing_region_or_bucket',
+      region,
+      bucket,
+      credentials,
+    }
+  }
+
+  if (!credentials) {
+    return {
+      ready: false,
+      reason: 'missing_credentials',
+      region,
+      bucket,
+      credentials,
+    }
+  }
+
+  return {
+    ready: true,
+    reason: null,
+    region,
+    bucket,
+    credentials,
+  }
+}
