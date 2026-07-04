@@ -27,11 +27,22 @@ export function getApiUrl(path: string): string {
 
 export function getAvatarUrl(profile: {
   avatarUrl: string | null;
-  avatar: { available?: boolean; urlPath: string } | null;
+  avatar: { available?: boolean; urlPath: string; version?: string | null } | null;
 }): string | null {
-  if (profile.avatarUrl) return profile.avatarUrl;
-  if (profile.avatar?.urlPath) return getApiUrl(profile.avatar.urlPath);
-  return null;
+  if (profile.avatar?.urlPath) {
+    const { urlPath, version } = profile.avatar;
+
+    if (urlPath.startsWith("/")) {
+      const base = getApiUrl(urlPath);
+      return version
+        ? `${base}?v=${encodeURIComponent(version)}`
+        : base;
+    }
+
+    return urlPath;
+  }
+
+  return profile.avatarUrl ?? null;
 }
 
 export function getResumeUrl(profile: {

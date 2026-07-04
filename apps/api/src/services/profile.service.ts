@@ -30,6 +30,7 @@ export type PublicProfile = Omit<
   avatar: {
     available: boolean
     urlPath: string
+    version: string | null
   } | null
   resume: {
     available: boolean
@@ -56,9 +57,13 @@ function toPublicProfile(profile: ProfileRow): PublicProfile {
   return {
     ...rest,
     avatar: avatarS3Key
-      ? { available: true, urlPath: '/profile/avatar' }
+      ? {
+          available: true,
+          urlPath: '/profile/avatar',
+          version: profile.updatedAt.toISOString(),
+        }
       : rest.avatarUrl
-        ? { available: true, urlPath: rest.avatarUrl }
+        ? { available: true, urlPath: rest.avatarUrl, version: null }
         : null,
     resume: resumeS3Key
       ? {

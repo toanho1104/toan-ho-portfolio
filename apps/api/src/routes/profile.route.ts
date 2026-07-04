@@ -40,6 +40,7 @@ const publicProfileRoutes = new Elysia({ prefix: '/profile' })
 
         set.status = 302
         set.headers['Location'] = avatar.url
+        set.headers['Cache-Control'] = 'private, no-cache, no-store, must-revalidate'
         return
       } catch (error) {
         console.error('[profile/avatar/public]', error)

@@ -21,7 +21,7 @@ export type Profile = {
   educationSchool: I18nField;
   educationDegree: I18nField;
   isAvailable: boolean;
-  avatar: { available: boolean; urlPath: string } | null;
+  avatar: { available: boolean; urlPath: string; version: string | null } | null;
   resume: { available: boolean; fileName: string | null; downloadPath: string } | null;
 };
 
