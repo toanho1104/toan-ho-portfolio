@@ -15,13 +15,10 @@ function getS3Client() {
   const config = getAwsConfig()
   s3Client = new S3Client({
     region: config.region,
-    credentials:
-      config.accessKeyId && config.secretAccessKey
-        ? {
-            accessKeyId: config.accessKeyId,
-            secretAccessKey: config.secretAccessKey,
-          }
-        : undefined,
+    credentials: {
+      accessKeyId: config.accessKeyId,
+      secretAccessKey: config.secretAccessKey,
+    },
   })
 
   return s3Client

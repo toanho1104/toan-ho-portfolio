@@ -25,6 +25,28 @@ function contentTypeFromKey(key: string) {
   return 'image/jpeg'
 }
 
+function normalizeImageMimeType(type: string, fileName: string) {
+  if (type === 'image/jpeg' || type === 'image/png' || type === 'image/webp') {
+    return type
+  }
+
+  if (type === 'image/jpg' || type === '') {
+    if (/\.jpe?g$/i.test(fileName)) return 'image/jpeg'
+    if (/\.png$/i.test(fileName)) return 'image/png'
+    if (/\.webp$/i.test(fileName)) return 'image/webp'
+  }
+
+  return type
+}
+
+async function safeDeleteObject(key: string) {
+  try {
+    await s3Service.deleteObject(key)
+  } catch (error) {
+    console.warn(`[avatar] failed to delete old object ${key}:`, error)
+  }
+}
+
 export const avatarService = {
   async getPublicUrl() {
     const profile = await db.query.profiles.findFirst()
@@ -61,7 +83,9 @@ export const avatarService = {
       throw new Error('AWS is not configured')
     }
 
-    if (!ALLOWED_MIME_TYPES.has(file.type)) {
+    const mimeType = normalizeImageMimeType(file.type, file.name)
+
+    if (!ALLOWED_MIME_TYPES.has(mimeType)) {
       throw new Error('Only JPEG, PNG, or WebP images are allowed')
     }
 
@@ -72,14 +96,14 @@ export const avatarService = {
     await profileService.ensureProfile(userId)
 
     const profile = await profileService.getByUserId(userId)
-    const key = buildAvatarKey(userId, file.type)
+    const key = buildAvatarKey(userId, mimeType)
     const buffer = new Uint8Array(await file.arrayBuffer())
 
     if (profile?.avatarS3Key && profile.avatarS3Key !== key) {
-      await s3Service.deleteObject(profile.avatarS3Key)
+      await safeDeleteObject(profile.avatarS3Key)
     }
 
-    await s3Service.uploadObject(key, buffer, file.type)
+    await s3Service.uploadObject(key, buffer, mimeType)
 
     const [updated] = await db
       .update(profiles)
@@ -93,8 +117,12 @@ export const avatarService = {
         updatedAt: profiles.updatedAt,
       })
 
+    if (!updated) {
+      throw new Error('Profile not found')
+    }
+
     return {
-      uploadedAt: updated!.updatedAt,
+      uploadedAt: updated.updatedAt,
       urlPath: '/profile/avatar',
     }
   },

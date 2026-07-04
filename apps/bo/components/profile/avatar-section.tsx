@@ -46,7 +46,7 @@ export function AvatarSection() {
     const file = e.target.files?.[0]
     if (!file) return
 
-    const allowed = ['image/jpeg', 'image/png', 'image/webp']
+    const allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
     if (!allowed.includes(file.type)) {
       alert('Only JPEG, PNG, or WebP images are allowed')
       return
@@ -99,7 +99,7 @@ export function AvatarSection() {
               <input
                 ref={fileInputRef}
                 type="file"
-                accept="image/jpeg,image/png,image/webp"
+                accept="image/jpeg,image/jpg,image/png,image/webp"
                 className="file-input file-input-bordered file-input-sm w-full max-w-md"
                 onChange={handleFileChange}
                 disabled={uploadMutation.isPending}

@@ -5,6 +5,7 @@ import { avatarService } from '@/services/avatar.service'
 import { updateProfileBodyValidator } from '@/validators/profile.validator'
 import { uploadAvatarBodyValidator } from '@/validators/avatar.validator'
 import { SWAGGER_TAGS } from '@/constants/swagger'
+import { mapStorageError } from '@/utils/storage-errors'
 
 const publicProfileRoutes = new Elysia({ prefix: '/profile' })
   .get(
@@ -89,30 +90,12 @@ const protectedProfileRoutes = new Elysia({ prefix: '/profile' })
         const result = await avatarService.upload(userId!, body.file)
         return { message: 'Avatar uploaded', avatar: result }
       } catch (error) {
-        const message =
-          error instanceof Error ? error.message : 'Upload failed'
-
-        if (message === 'Profile not found') {
-          set.status = 404
-          return { message }
+        const { status, message } = mapStorageError(error)
+        if (status >= 500) {
+          console.error('[profile/avatar/upload]', error)
         }
-
-        if (
-          message === 'Only JPEG, PNG, or WebP images are allowed' ||
-          message === 'Image size must be 2MB or less'
-        ) {
-          set.status = 422
-          return { message }
-        }
-
-        if (message === 'AWS is not configured') {
-          set.status = 503
-          return { message }
-        }
-
-        console.error('[profile/avatar/upload]', error)
-        set.status = 500
-        return { message: 'Upload failed' }
+        set.status = status
+        return { message }
       }
     },
     {
