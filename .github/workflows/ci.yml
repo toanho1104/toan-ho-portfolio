@@ -85,7 +85,11 @@ jobs:
             export DEPLOY_SHA="$(git rev-parse --short HEAD)"
             echo "Deploying commit ${DEPLOY_SHA}"
             COMPOSE="docker compose --env-file .env.production -f docker-compose.prod.yml"
-            $COMPOSE build bo web api
+            export COMPOSE_PARALLEL_LIMIT=1
+            # Build one service at a time — parallel Next.js builds OOM small EC2 instances
+            $COMPOSE build api
+            $COMPOSE build bo
+            $COMPOSE build web
             $COMPOSE up -d --force-recreate --remove-orphans --wait || {
               $COMPOSE up -d --force-recreate --remove-orphans
               echo "Waiting for services to become healthy..."
