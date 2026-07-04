@@ -18,7 +18,16 @@
     "unavailable": "Hiện không nhận việc",
     "ctaProjects": "Xem dự án",
     "ctaContact": "Liên hệ",
-    "ctaResume": "Tải CV"
+    "ctaResume": "Xem trước CV",
+    "socials": "Kết nối"
+  },
+  "resume": {
+    "title": "CV",
+    "download": "Tải xuống",
+    "loading": "Đang tải CV…",
+    "loadError": "Không thể tải CV. Vui lòng thử lại.",
+    "retry": "Thử lại",
+    "close": "Đóng"
   },
   "about": {
     "title": "Giới thiệu",

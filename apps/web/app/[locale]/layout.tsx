@@ -61,6 +61,7 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       className={`${inter.variable} ${jetbrainsMono.variable}`}
+      data-theme="dark"
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >

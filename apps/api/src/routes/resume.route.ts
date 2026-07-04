@@ -4,7 +4,33 @@ import { resumeService } from '@/services/resume.service'
 import { uploadResumeBodyValidator } from '@/validators/resume.validator'
 import { SWAGGER_TAGS } from '@/constants/swagger'
 
-const publicResumeRoutes = new Elysia({ prefix: '/resume' }).get(
+const publicResumeRoutes = new Elysia({ prefix: '/resume' })
+  .get(
+    '/view',
+    async ({ set }) => {
+      try {
+        const view = await resumeService.getPublicView()
+
+        if (!view) {
+          set.status = 404
+          return { message: 'Resume not found' }
+        }
+
+        return view
+      } catch (error) {
+        console.error('[resume/view]', error)
+        set.status = 503
+        return { message: 'Resume storage is unavailable' }
+      }
+    },
+    {
+      detail: {
+        tags: [SWAGGER_TAGS.RESUME],
+        summary: 'Get CV preview URL (inline PDF)',
+      },
+    },
+  )
+  .get(
   '/download',
   async ({ set }) => {
     try {

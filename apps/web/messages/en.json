@@ -18,7 +18,16 @@
     "unavailable": "Currently unavailable",
     "ctaProjects": "View projects",
     "ctaContact": "Get in touch",
-    "ctaResume": "Download CV"
+    "ctaResume": "Preview CV",
+    "socials": "Connect"
+  },
+  "resume": {
+    "title": "Curriculum Vitae",
+    "download": "Download",
+    "loading": "Loading CV…",
+    "loadError": "Could not load CV. Please try again.",
+    "retry": "Try again",
+    "close": "Close"
   },
   "about": {
     "title": "About me",

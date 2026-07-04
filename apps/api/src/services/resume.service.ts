@@ -30,6 +30,22 @@ export const resumeService = {
     }
   },
 
+  async getPublicView() {
+    const profile = await db.query.profiles.findFirst()
+
+    if (!profile?.resumeS3Key) {
+      return null
+    }
+
+    const fileName = profile.resumeFileName ?? 'resume.pdf'
+    const url = await s3Service.getPresignedViewUrl(
+      profile.resumeS3Key,
+      fileName,
+    )
+
+    return { url, fileName }
+  },
+
   async getForUser(userId: string) {
     const profile = await db.query.profiles.findFirst({
       where: eq(profiles.userId, userId),

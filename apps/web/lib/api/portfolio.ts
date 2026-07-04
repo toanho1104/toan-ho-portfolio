@@ -33,4 +33,11 @@ export const portfolioApi = {
     const { data } = await apiClient.get<SkillCategory[]>("/skills/categories");
     return data;
   },
+
+  getResumeViewUrl: async (): Promise<{ url: string; fileName: string }> => {
+    const { data } = await apiClient.get<{ url: string; fileName: string }>(
+      "/resume/view",
+    );
+    return data;
+  },
 };

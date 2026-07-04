@@ -2,9 +2,8 @@
 
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
-import { AboutSection } from "@/components/sections/about";
+import { Introduction } from "@/components/sections/introduction";
 import { ExperienceSection } from "@/components/sections/experience";
-import { Hero } from "@/components/sections/hero";
 import { ProjectsSection } from "@/components/sections/projects";
 import { SkillsSection } from "@/components/sections/skills";
 import { Container } from "@/components/ui/container";
@@ -74,8 +73,7 @@ export function PortfolioPage({ locale }: PortfolioPageProps) {
     <>
       <Navbar name={profile.name} />
       <main>
-        <Hero profile={profile} locale={locale} />
-        <AboutSection profile={profile} locale={locale} />
+        <Introduction profile={profile} locale={locale} />
         <ProjectsSection
           projects={projectsQuery.data ?? []}
           locale={locale}

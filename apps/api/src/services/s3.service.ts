@@ -69,6 +69,24 @@ export const s3Service = {
     return getSignedUrl(client, command, { expiresIn: expiresInSeconds })
   },
 
+  async getPresignedViewUrl(
+    key: string,
+    fileName: string,
+    expiresInSeconds = 3600,
+  ) {
+    const { bucket } = getAwsConfig()
+    const client = getS3Client()
+
+    const command = new GetObjectCommand({
+      Bucket: bucket,
+      Key: key,
+      ResponseContentDisposition: `inline; filename="${encodeURIComponent(fileName)}"`,
+      ResponseContentType: 'application/pdf',
+    })
+
+    return getSignedUrl(client, command, { expiresIn: expiresInSeconds })
+  },
+
   async getPresignedObjectUrl(
     key: string,
     contentType: string,
