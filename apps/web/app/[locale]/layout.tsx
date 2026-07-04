@@ -61,6 +61,7 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       className={`${inter.variable} ${jetbrainsMono.variable}`}
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-base-100 font-sans text-base-content antialiased">
