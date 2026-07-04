@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "Toan Ho | Lập trình viên phần mềm",
+    "description": "Portfolio của Toan Ho — Lập trình viên React Native & full-stack, tạo trải nghiệm mobile mượt mà."
+  },
+  "nav": {
+    "about": "Giới thiệu",
+    "projects": "Dự án",
+    "experience": "Kinh nghiệm",
+    "skills": "Kỹ năng",
+    "contact": "Liên hệ",
+    "menu": "Mở menu",
+    "close": "Đóng menu"
+  },
+  "hero": {
+    "greeting": "Xin chào, tôi là",
+    "available": "Sẵn sàng nhận việc",
+    "unavailable": "Hiện không nhận việc",
+    "ctaProjects": "Xem dự án",
+    "ctaContact": "Liên hệ",
+    "ctaResume": "Tải CV"
+  },
+  "about": {
+    "title": "Giới thiệu",
+    "subtitle": "Về tôi",
+    "education": "Học vấn"
+  },
+  "projects": {
+    "title": "Dự án",
+    "subtitle": "Dự án tiêu biểu",
+    "featured": "Nổi bật",
+    "viewAll": "Tất cả dự án",
+    "empty": "Chưa có dự án.",
+    "links": {
+      "github": "GitHub",
+      "demo": "Demo",
+      "appStore": "App Store",
+      "playStore": "CH Play"
+    }
+  },
+  "experience": {
+    "title": "Kinh nghiệm",
+    "subtitle": "Hành trình làm việc",
+    "present": "Hiện tại",
+    "empty": "Chưa có kinh nghiệm."
+  },
+  "skills": {
+    "title": "Kỹ năng",
+    "subtitle": "Công nghệ & thế mạnh",
+    "empty": "Chưa có kỹ năng."
+  },
+  "footer": {
+    "rights": "Bảo lưu mọi quyền.",
+    "builtWith": "Xây dựng với Next.js"
+  },
+  "theme": {
+    "light": "Giao diện sáng",
+    "dark": "Giao diện tối"
+  },
+  "lang": {
+    "en": "English",
+    "vi": "Tiếng Việt"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "Toan Ho | Software Developer",
+    "description": "Portfolio of Toan Ho — React Native & full-stack developer crafting smooth mobile experiences."
+  },
+  "nav": {
+    "about": "About",
+    "projects": "Projects",
+    "experience": "Experience",
+    "skills": "Skills",
+    "contact": "Contact",
+    "menu": "Open menu",
+    "close": "Close menu"
+  },
+  "hero": {
+    "greeting": "Hello, I'm",
+    "available": "Open to opportunities",
+    "unavailable": "Currently unavailable",
+    "ctaProjects": "View projects",
+    "ctaContact": "Get in touch",
+    "ctaResume": "Download CV"
+  },
+  "about": {
+    "title": "About me",
+    "subtitle": "Who I am",
+    "education": "Education"
+  },
+  "projects": {
+    "title": "Projects",
+    "subtitle": "Selected work",
+    "featured": "Featured",
+    "viewAll": "All projects",
+    "empty": "No projects yet.",
+    "links": {
+      "github": "GitHub",
+      "demo": "Live demo",
+      "appStore": "App Store",
+      "playStore": "Play Store"
+    }
+  },
+  "experience": {
+    "title": "Experience",
+    "subtitle": "Where I've worked",
+    "present": "Present",
+    "empty": "No experience listed yet."
+  },
+  "skills": {
+    "title": "Skills",
+    "subtitle": "Technologies & strengths",
+    "empty": "No skills listed yet."
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "builtWith": "Built with Next.js"
+  },
+  "theme": {
+    "light": "Light mode",
+    "dark": "Dark mode"
+  },
+  "lang": {
+    "en": "English",
+    "vi": "Tiếng Việt"
+  }
+}
