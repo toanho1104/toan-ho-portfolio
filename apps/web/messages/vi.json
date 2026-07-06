@@ -34,6 +34,24 @@
     "subtitle": "Về tôi",
     "education": "Học vấn"
   },
+  "introduction": {
+    "openSource": {
+      "title": "Open Source",
+      "rnInline": {
+        "title": "RN Inline to StyleSheet",
+        "description": "Extension VS Code chuyển inline style React Native sang StyleSheet.create để tối ưu hiệu năng."
+      },
+      "rnScaleCache": {
+        "title": "rn-scale-cache",
+        "description": "Thư viện scale responsive có memoize cho React Native — zero dependencies, MIT."
+      },
+      "links": {
+        "marketplace": "Marketplace",
+        "npm": "npm",
+        "github": "GitHub"
+      }
+    }
+  },
   "projects": {
     "title": "Dự án",
     "subtitle": "Dự án tiêu biểu",

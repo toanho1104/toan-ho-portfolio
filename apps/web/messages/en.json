@@ -34,6 +34,24 @@
     "subtitle": "Who I am",
     "education": "Education"
   },
+  "introduction": {
+    "openSource": {
+      "title": "Open Source",
+      "rnInline": {
+        "title": "RN Inline to StyleSheet",
+        "description": "VS Code extension that extracts inline React Native styles to StyleSheet.create for better performance."
+      },
+      "rnScaleCache": {
+        "title": "rn-scale-cache",
+        "description": "Memoized responsive scaling utilities for React Native — zero dependencies, MIT licensed."
+      },
+      "links": {
+        "marketplace": "Marketplace",
+        "npm": "npm",
+        "github": "GitHub"
+      }
+    }
+  },
   "projects": {
     "title": "Projects",
     "subtitle": "Selected work",

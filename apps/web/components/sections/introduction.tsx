@@ -10,6 +10,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/ui/container";
 import { ResumeViewButton } from "@/components/resume/resume-view-button";
+import { IntroductionOpenSource } from "@/components/sections/introduction-open-source";
 import { getProfileSocials, SocialLinks } from "@/components/ui/social-links";
 import type { Locale, Profile } from "@/lib/types/portfolio";
 import { getAvatarUrl, getResumeUrl } from "@/lib/api/client";
@@ -217,6 +218,14 @@ export function Introduction({ profile, locale }: IntroductionProps) {
                 />
               </motion.div>
             )}
+
+            <IntroductionOpenSource
+              className={
+                hasSocials
+                  ? "mt-6"
+                  : "mt-8 border-t border-base-content/10 pt-6"
+              }
+            />
           </motion.div>
 
           {/* ── Right panel wrapper (contents on mobile for reordering) ── */}
