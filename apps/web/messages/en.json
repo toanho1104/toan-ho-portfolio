@@ -78,7 +78,8 @@
   },
   "footer": {
     "rights": "All rights reserved.",
-    "builtWith": "Built with Next.js"
+    "stackNote": "Not a static site — includes admin CMS, REST API, PostgreSQL, S3, and CI/CD auto-deploy on AWS EC2.",
+    "stackLabel": "Tech stack"
   },
   "theme": {
     "light": "Light mode",

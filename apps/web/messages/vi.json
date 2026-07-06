@@ -78,7 +78,8 @@
   },
   "footer": {
     "rights": "Bảo lưu mọi quyền.",
-    "builtWith": "Xây dựng với Next.js"
+    "stackNote": "Không phải trang tĩnh — có BO quản trị, REST API, PostgreSQL, S3 và CI/CD tự deploy trên AWS EC2.",
+    "stackLabel": "Tech stack"
   },
   "theme": {
     "light": "Giao diện sáng",

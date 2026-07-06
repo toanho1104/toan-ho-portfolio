@@ -214,7 +214,13 @@ function FooterSkeleton() {
         <div className="flex flex-col items-center gap-2 sm:items-start">
           <Skeleton className="h-5 w-32" />
           <Skeleton className="h-3 w-48" />
-          <Skeleton className="h-3 w-36" />
+          <Skeleton className="mt-2 h-3 w-full max-w-md" />
+          <Skeleton className="h-3 w-4/5 max-w-sm" />
+          <div className="mt-2 flex flex-wrap justify-center gap-1.5 sm:justify-start">
+            {Array.from({ length: 7 }).map((_, i) => (
+              <Skeleton key={i} className="h-5 w-16 rounded-md" />
+            ))}
+          </div>
         </div>
         <div className="flex gap-2">
           {Array.from({ length: 4 }).map((_, i) => (
