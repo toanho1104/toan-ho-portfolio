@@ -41,15 +41,10 @@ export function SkillsSection({ categories, locale }: SkillsSectionProps) {
                       {skills.map((skill) => (
                         <span
                           key={skill.id}
-                          className="inline-flex items-center gap-1.5 rounded-lg bg-base-200/80 px-2.5 py-1 text-sm text-base-content/80"
+                          className="inline-flex items-center rounded-lg bg-base-200/80 px-2.5 py-1 text-sm text-base-content/80"
                           title={skill.level}
                         >
                           {skill.name}
-                          {skill.yearsOfExperience != null && (
-                            <span className="font-mono text-[10px] text-base-content/40">
-                              {skill.yearsOfExperience}y
-                            </span>
-                          )}
                         </span>
                       ))}
                     </div>

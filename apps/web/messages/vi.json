@@ -78,7 +78,7 @@
   },
   "footer": {
     "rights": "Bảo lưu mọi quyền.",
-    "stackNote": "Không phải trang tĩnh — có BO quản trị, REST API, PostgreSQL, S3 và CI/CD tự deploy trên AWS EC2.",
+    "stackNote": "Nền tảng portfolio full-stack — web công khai, BO quản trị, REST API, PostgreSQL & S3, triển khai tự động qua CI/CD trên AWS EC2.",
     "stackLabel": "Tech stack"
   },
   "theme": {
